@@ -252,13 +252,22 @@ combine_static_libraries() {
         "${base_dir}/${build_dir}/ggml/src/ggml-blas/${release_dir}/libggml-blas.a"
         "${base_dir}/${build_dir}/tools/mtmd/${release_dir}/libmtmd.a"
     )
+
+    echo "Checking for expected static libraries in ${build_dir}..."
+    for lib in "${libs[@]}"; do
+        if [[ -f "$lib" ]]; then
+            echo "  FOUND: $lib"
+        else
+            echo "  MISSING: $lib"
+        fi
+    done
     # Create temporary directory for processing
     local temp_dir="${base_dir}/${build_dir}/temp"
     mkdir -p "${temp_dir}"
 
     # Since we have multiple architectures libtool will find object files that do not
     # match the target architecture. We suppress these warnings.
-    xcrun libtool -static -o "${temp_dir}/combined.a" "${libs[@]}" 2> /dev/null
+    xcrun libtool -static -o "${temp_dir}/combined.a" "${libs[@]}"
 
     # Determine SDK, architectures, and install_name based on platform and simulator flag.
     local sdk=""
