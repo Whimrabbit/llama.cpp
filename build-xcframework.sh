@@ -45,6 +45,7 @@ COMMON_CMAKE_ARGS=(
     -DGGML_METAL_USE_BF16=${GGML_METAL_USE_BF16}
     -DGGML_NATIVE=OFF
     -DGGML_OPENMP=${GGML_OPENMP}
+    -DLLAMA_BUILD_MTMD=ON
 )
 
 check_required_tool() {
@@ -126,6 +127,8 @@ setup_framework_structure() {
     cp ggml/include/ggml-cpu.h     ${header_path}
     cp ggml/include/ggml-blas.h    ${header_path}
     cp ggml/include/gguf.h         ${header_path}
+    cp tools/mtmd/mtmd.h           ${header_path}
+    cp tools/mtmd/mtmd-helper.h    ${header_path}
 
     # Create module map (common for all platforms)
     cat > ${module_path}module.modulemap << EOF
@@ -247,8 +250,8 @@ combine_static_libraries() {
         "${base_dir}/${build_dir}/ggml/src/${release_dir}/libggml-cpu.a"
         "${base_dir}/${build_dir}/ggml/src/ggml-metal/${release_dir}/libggml-metal.a"
         "${base_dir}/${build_dir}/ggml/src/ggml-blas/${release_dir}/libggml-blas.a"
+        "${base_dir}/${build_dir}/tools/mtmd/${release_dir}/libmtmd.a"
     )
-
     # Create temporary directory for processing
     local temp_dir="${base_dir}/${build_dir}/temp"
     mkdir -p "${temp_dir}"
