@@ -265,6 +265,9 @@ combine_static_libraries() {
             echo "  MISSING: $lib"
         fi
     done
+
+    echo "Searching entire build-ios-sim for any mtmd build products..."
+    find build-ios-sim -iname '*mtmd*' -not -path '*/CMakeFiles/*'
     # Create temporary directory for processing
     local temp_dir="${base_dir}/${build_dir}/temp"
     mkdir -p "${temp_dir}"
