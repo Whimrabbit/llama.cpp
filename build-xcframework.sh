@@ -224,10 +224,6 @@ EOF
 EOF
 }
 
-echo "Searching for libmtmd.a..."
-find build-ios-device -iname 'libmtmd*'
-find build-ios-sim -iname 'libmtmd*'
-
 # Create dynamic libraries from static libraries.
 combine_static_libraries() {
     local build_dir="$1"
