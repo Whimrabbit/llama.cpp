@@ -265,9 +265,6 @@ combine_static_libraries() {
             echo "  MISSING: $lib"
         fi
     done
-
-    echo "Full recursive search for any mtmd-related build output in ${build_dir}..."
-    find "${base_dir}/${build_dir}" -iname '*mtmd*' -not -path '*/CMakeFiles/*'
     # Create temporary directory for processing
     local temp_dir="${base_dir}/${build_dir}/temp"
     mkdir -p "${temp_dir}"
@@ -518,6 +515,9 @@ cmake -B build-tvos-device -G Xcode \
     -S .
 cmake --build build-tvos-device --config Release -j $(sysctl -n hw.logicalcpu) -- -quiet
 
+echo "Full recursive search for any mtmd-related build output..."
+find build-ios-sim -iname '*mtmd*' -not -path '*/CMakeFiles/*'
+find build-ios-device -iname '*mtmd*' -not -path '*/CMakeFiles/*'
 # Setup frameworks and copy binaries and headers
 echo "Setting up framework structures..."
 setup_framework_structure "build-ios-sim" ${IOS_MIN_OS_VERSION} "ios"
